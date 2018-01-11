@@ -9,12 +9,12 @@ end
 module CompressionAlgorithms
   class ArithmeticCoding
     class Encoder
-      attr_reader :code_distribution, :BIT_PRECISION, :RANGE_MAX, :WHOLE, :HALF, :QUARTER, :THREE_QUARTER
+      attr_accessor :code_distribution, :code_dictionary, :BIT_PRECISION, :RANGE_MAX, :WHOLE, :HALF, :QUARTER, :THREE_QUARTER
       def initialize(bit_precision = 31)
         # These are set here just for development
         # They will be set based on the data being compressed
-        @code_distribution = [20,10,5,30] 
-        @code_dictionary = ["A","B","C","D"]
+        @code_distribution = [] 
+        @code_dictionary = []
 
         @BIT_PRECISION = bit_precision.freeze
         @RANGE_MAX = (2**@BIT_PRECISION).freeze
@@ -29,8 +29,8 @@ module CompressionAlgorithms
           "QUARTER: #{@QUARTER}\n" +
           "THREE_QUARTER: #{@THREE_QUARTER}\n\n"
       end
-      def encode(bytes)
 
+      def encode(bytes)
       end
 
       def code_range(code_number)
@@ -42,6 +42,17 @@ module CompressionAlgorithms
 
       def code_total 
         @code_distribution.inject(:+);
+      end
+
+      def add_code(new_code = nil)
+        @code_distribution << 1
+        @code_dictionary = new_code
+
+        return @code_dictionary.length
+      end
+
+      def get_code(code_number)
+        @code_dictionary[code_number]
       end
     end
   end
